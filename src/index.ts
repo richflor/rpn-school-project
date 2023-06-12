@@ -94,19 +94,6 @@ function createNumberStack(expressionStringStack:Stack) {
     return numberStack;
 }
 
-// function createNumberStack(array:string[]) {
-//     const numberStack = new Stack();
-//     for (const element in array) {
-//         const number = Number(element);
-//         if (!isNaN(number)) {
-//             numberStack.push(number)
-//         } else {
-//             break;
-//         }
-//     }
-//     return numberStack;
-// }
-
 function createOperandStack(expressionStringStack:Stack) {
     const operandStack = new Stack();
     const arrayOperands:any[] = [];
@@ -127,43 +114,6 @@ function createOperandStack(expressionStringStack:Stack) {
     });
     return operandStack;
 }
-
-// function createOperandStack(array:string[]) {
-//     const operandStack = new Stack();
-//     for (const element in array) {
-//         const number = Number(element);
-//         if (isNaN(number)) {
-//             operandStack.push(element)
-//         } else {
-//             break;
-//         }
-//     }
-//     return operandStack;
-// }
-
-
-// FORMER
-// function createNumberStack(array:string[]) {
-//     const numberStack = new Stack();
-//     array.forEach(element => {
-//         const number = Number(element);
-//         if (!isNaN(number)) {
-//             numberStack.push(number)
-//         }
-//     });
-//     return numberStack
-// }
-
-// function createOperandStack(array:string[]) {
-//     const operandStack = new Stack();
-//     const operands:string[] = []
-//     array.reverse().forEach(element => {
-//         if (isNaN(Number(element))) {
-//             operandStack.push(element)
-//         }
-//     });
-//     return operandStack
-// }
 
 function calc(x:number, y: number, operand:string) {
     let result:number
