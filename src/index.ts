@@ -46,6 +46,7 @@ function rpn(expression:string) {
 
     } catch (error) {
         console.log(error)
+        return '?'
     }
 }
 

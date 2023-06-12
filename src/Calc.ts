@@ -13,7 +13,7 @@ class Calc {
     }
 
     static div(x:number, y:number) {
-        if (y === 0) throw "Can't divide by 0";
+        if (x === 0) throw "Can't divide by 0";
         return y / x;
     }
 

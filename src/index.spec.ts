@@ -11,4 +11,6 @@ test(" first", () => {
   expect(rpn("10 3 - 2 -")).toEqual(5);
   expect(rpn("38 72 2 / - 20 MOD 3 +")).toEqual(5);
   expect(rpn("3 NEGATE 5 +")).toEqual(2);
+  expect(rpn("1 0 /")).toEqual("?");
+  expect(rpn("1 1 1 - /")).toEqual("?");
 })
