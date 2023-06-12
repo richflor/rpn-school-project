@@ -7,8 +7,12 @@ class Stack {
         this.items = [];
     }
   
-    public push(elem:string|number){
+    public push(elem:string|number) {
       this.items.push(elem);
+    }
+
+    public negative() {
+        this.items[this.items.length - 1] = - this.items[this.items.length - 1];
     }
 
     public pop() {

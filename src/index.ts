@@ -66,21 +66,17 @@ function createExpressionStringStack(array:string[]) {
 function createNumberStack(expressionStringStack:Stack) {
     const numberStack = new Stack();
 
-    let negate = false;
-
     for (let i = 0; i <= expressionStringStack.length(); i++) {
         const element = expressionStringStack.peek();
 
         if (element === "NEGATE") {
-            negate = true;
-            expressionStringStack.pop();
+            numberStack.negative();
+            expressionStringStack.pop()
             console.log("negate")
             continue;
         }
 
-        const number = negate ? -Number(element) : Number(element);
-
-        if (number < 0) {negate = false; console.log("reset")};
+        const number = Number(element);
 
         if (!isNaN(number)) {
             numberStack.push(number)

@@ -10,32 +10,5 @@ test(" first", () => {
   expect(rpn("3 75 6 / *")).toEqual(37.5);
   expect(rpn("10 3 - 2 -")).toEqual(5);
   expect(rpn("38 72 2 / - 20 MOD 3 +")).toEqual(5);
-  expect(rpn("3 NEGATE 5 +")).toEqual(-2);
+  expect(rpn("3 NEGATE 5 +")).toEqual(2);
 })
-
-// test("A simple test (Jest)", () => {
-//   expect(1 + 1).toEqual(2);
-// });
-
-// test("Additional matchers (jest-extended)", () => {
-//   expect([1, 0]).toIncludeSameMembers([0, 1]);
-// });
-
-// test("Property-based testing (fast-check)", () => {
-//   type Boundaries = {
-//     min: number;
-//     max: number;
-//   };
-
-//   const minmax =
-//     ({ min, max }: Boundaries) =>
-//     (n: number): number =>
-//       Math.min(max, Math.max(min, n));
-
-//   fc.assert(
-//     fc.property(fc.integer(), (n): boolean => {
-//       const result = minmax({ min: 1, max: 10 })(n);
-//       return 1 <= result && result <= 10;
-//     })
-//   );
-// });
