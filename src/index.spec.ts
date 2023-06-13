@@ -34,3 +34,7 @@ test("multiple operations", () => {
   expect(rpn("38 72 2 / - 20 MOD 3 +")).toEqual(5);
   expect(rpn("27 6 2 NEGATE + MOD 7 21 / * 8 72 + /")).toEqual(0.0125 );
 })
+
+test("multiple NEGATE operations ", () => {
+  expect(rpn("1 1 NEGATE 1 NEGATE 3 NEGATE - + /")).toEqual(1);
+})
