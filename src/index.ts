@@ -1,149 +1,96 @@
-import Stack from "./Stack";
-import Calc from "./Calc";
+class StackArray{
+  Stack = [];
+  peek: number;
+  length:number
+  constructor(){
+      this.Stack = []
+      this.length = 0
+  }
 
-function rpn(expression:string) {
-    try {
-        const arrayExpressionElements = arrayTostring(expression);
+  inCome(value : number){
+      this.Stack.push(value)
+      this.peek = value
+      this.length +=1
+  }
 
-        const expressionStringStack = createExpressionStringStack(arrayExpressionElements)
+  outCome(){
+      let tmp = this.Stack.pop()
+      this.peek = this.Stack[this.Stack.length - 1]
+      this.length -=1
+      return tmp
+  }
 
-        let result:number;
+  getPeek(){
+      return this.peek
+  }
+}
 
-        while (expressionStringStack.length() > 0) {
-            console.log("l is " + expressionStringStack.length())
-            let numberStack = createNumberStack(expressionStringStack);
-            console.log(`n = ${numberStack.length()}`)
-            let operandStack = createOperandStack(expressionStringStack);
-            console.log(`op = ${operandStack.length()}`)
-    
-            while (numberStack.length() > 1) {
-                let x = numberStack.pop();
-                console.log(`x = ${x}`)
-                let y = numberStack.pop();
-                console.log(`y = ${y}`)
-                let operand = operandStack.pop()
-    
-                if(typeof x === "number" && typeof y === "number" && typeof operand === "string") {
-                    result = calc(x, y, operand);
-                } else {
-                    throw "type error in stack"
-                }
-    
-                numberStack.push(result)
-                console.log(`r = ${result}`)
-            }
+function splitExpresion(expression : string):any{
+  return expression.split(' ')
+}
 
-            console.log("lop = " + expressionStringStack.length())
-
-            if (expressionStringStack.length() > 0) {
-                expressionStringStack.push(result)
-            }
-        }
-
-        console.log("END")
-
-        return result;
-
-    } catch (error) {
-        console.log(error)
-        return '?'
+function noNegate(tabExpr:[]):any{
+  let tmp = []
+  for (let i = 0; i < tabExpr.length; i++) {
+    if (tabExpr[i] !== "NEGATE") {
+      tmp.push(tabExpr[i])
+    }else{
+      tmp[i-1] =  "-"+tmp[i-1]
     }
+  }
+  return tmp
 }
 
+const computeSingle = (b:number,a:number,operator:string):number =>{
+  switch (operator) {
+    case "*":
+      return b*a
+    break;
+    case "-":
+      return b-a
+    break;
+    case "+":
+      return b+a
+    break;
+    case "/":
+      return b/a
+    break;
+    case "MOD":
+      return b%a
+    break;
 
-function arrayTostring(expression:string) {
-    return expression.split(" ")
+    default:
+      break;
+  }
 }
 
-function createExpressionStringStack(array:string[]) {
-    const expressionStringStack = new Stack();
-    array.reverse().forEach(element => {
-        expressionStringStack.push(element)
-    });
+const rpn = (expression: string) => {
+let expr = noNegate(splitExpresion(expression))
+let stackOperande = new StackArray()
 
-    return expressionStringStack;
-}
-
-function createNumberStack(expressionStringStack:Stack) {
-    const numberStack = new Stack();
-
-    for (let i = 0; i <= expressionStringStack.length(); i++) {
-        const element = expressionStringStack.peek();
-
-        if (element === "NEGATE") {
-            numberStack.negative();
-            expressionStringStack.pop()
-            console.log("negate")
-            continue;
-        }
-
-        const number = Number(element);
-
-        if (!isNaN(number)) {
-            numberStack.push(number)
-            expressionStringStack.pop();
-            console.log(number)
-        } else {
-            break;
-        }
+try {
+  for (let i = 0; i < expr.length; i++) {
+    if(isNaN(expr[i])){
+      console.log("no ",expr[i])
+      let a = Number(stackOperande.outCome())
+      let b = Number(stackOperande.outCome())
+      let c = computeSingle(b,a,expr[i])
+      stackOperande.inCome(c)
     }
-    // console.log("peek " + expressionStringStack.peek())
-    return numberStack;
-}
-
-function createOperandStack(expressionStringStack:Stack) {
-    const operandStack = new Stack();
-    const arrayOperands:any[] = [];
-    while (expressionStringStack.length() > 0) {
-        console.log("peek " + expressionStringStack.peek())
-        const element = expressionStringStack.peek();
-        const number = Number(element);
-        console.log("elem " + element)
-        if (isNaN(number)) {
-            arrayOperands.push(element)
-            expressionStringStack.pop();
-            // console.log("check loop = " + i)
-        } else {
-            console.log("break")
-            break;
-        }
-        console.log("big len " + expressionStringStack.length())
-        console.log("peek out " + expressionStringStack.peek())
+    else{
+      console.log("yes ",expr[i])
+      stackOperande.inCome(expr[i])
     }
-    // for (let i = 0; i <= expressionStringStack.length()+2; i++) {
-
-    // }
-    console.log("check len = " + arrayOperands.length)
-    arrayOperands.reverse().forEach(element => {
-        operandStack.push(element)
-        console.log(element)
-    });
-    return operandStack;
+  }
+} catch (error) {
+  console.log(error)
+  return error
 }
 
-function calc(x:number, y: number, operand:string) {
-    let result:number
-
-    switch (operand) {
-        case "+":
-            result = Calc.add(x,y);
-            break;
-        case "-":
-            result = Calc.minus(x,y);
-            break;
-        case "*":
-            result = Calc.mult(x,y);
-            break;
-        case "/":
-            result = Calc.div(x,y);
-            break;
-        case "MOD":
-            result = Calc.mod(x,y);
-            break;
-        default:
-            throw `${operand} is invalid as an operand`
-    }
-    return result;
+if (stackOperande.length != 1) {
+  return "INVALID"
 }
+return stackOperande.getPeek()
+};
 
 export default rpn;
