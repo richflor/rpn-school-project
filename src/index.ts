@@ -38,11 +38,15 @@ function peek(array:string|number[]):number|string {
 
 function removeNegate(tabExpr : string[]): any {
     let tmp = [];
+    let offset = 0
     for (let i = 0; i < tabExpr.length; i++) {
         if (tabExpr[i] !== "NEGATE") {
             tmp.push(tabExpr[i]);
+            console.log("ty ",tabExpr[i])
         } else {
-            tmp[i - 1] = "-" + tmp[i - 1];
+            tmp[i - 1 - offset] = "-" + tmp[i - 1 - offset];
+            offset++
+            console.log("bo ",tmp)
         }
     }
     return tmp;
