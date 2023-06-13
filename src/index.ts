@@ -75,6 +75,9 @@ try {
       let a = Number(stackOperande.outCome())
       let b = Number(stackOperande.outCome())
       let c = computeSingle(b,a,expr[i])
+      if (c === Infinity){
+        return '?'
+      }
       stackOperande.inCome(c)
     }
     else{
