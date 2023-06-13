@@ -1,9 +1,7 @@
 // @ts-ignore see https://github.com/jest-community/jest-extended#setup
-import * as matchers from "jest-extended";
-import fc from "fast-check";
 import rpn from ".";
 
-expect.extend(matchers);
+
 
 test("two numbers", () => {
   expect(rpn("5 2.4 -")).toEqual(2.6);
