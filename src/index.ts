@@ -1,149 +1,74 @@
-import Stack from "./Stack";
-import Calc from "./Calc";
+const expressionSeparator = " ";
 
-function rpn(expression:string) {
+const rpn = (expression : string) => {
+    const arrayExpressions = removeNegate(expression.split(expressionSeparator));
+    let stackOperations:string|number[] = [];
+
     try {
-        const arrayExpressionElements = arrayTostring(expression);
-
-        const expressionStringStack = createExpressionStringStack(arrayExpressionElements)
-
-        let result:number;
-
-        while (expressionStringStack.length() > 0) {
-            console.log("l is " + expressionStringStack.length())
-            let numberStack = createNumberStack(expressionStringStack);
-            console.log(`n = ${numberStack.length()}`)
-            let operandStack = createOperandStack(expressionStringStack);
-            console.log(`op = ${operandStack.length()}`)
-    
-            while (numberStack.length() > 1) {
-                let x = numberStack.pop();
-                console.log(`x = ${x}`)
-                let y = numberStack.pop();
-                console.log(`y = ${y}`)
-                let operand = operandStack.pop()
-    
-                if(typeof x === "number" && typeof y === "number" && typeof operand === "string") {
-                    result = calc(x, y, operand);
-                } else {
-                    throw "type error in stack"
+        for (let i = 0; i < arrayExpressions.length; i++) {
+            if (isNaN(arrayExpressions[i])) {
+                console.log("no ", arrayExpressions[i]);
+                let a = Number(stackOperations.pop());
+                let b = Number(stackOperations.pop());
+                let c = compute(b, a, arrayExpressions[i]);
+                if (c === Infinity) {
+                    return "?";
                 }
-    
-                numberStack.push(result)
-                console.log(`r = ${result}`)
-            }
-
-            console.log("lop = " + expressionStringStack.length())
-
-            if (expressionStringStack.length() > 0) {
-                expressionStringStack.push(result)
+                stackOperations.push(c);
+            } else {
+                console.log("yes ", arrayExpressions[i]);
+                stackOperations.push(arrayExpressions[i]);
             }
         }
-
-        console.log("END")
-
-        return result;
-
     } catch (error) {
-        console.log(error)
-        return '?'
+        console.log(error);
+        return error;
     }
+
+    if (stackOperations.length != 1) {
+        return "INVALID";
+    }
+
+    return peek(stackOperations);
+};
+
+function peek(array:string|number[]):number|string {
+    return array[array.length - 1]
 }
 
-
-function arrayTostring(expression:string) {
-    return expression.split(" ")
-}
-
-function createExpressionStringStack(array:string[]) {
-    const expressionStringStack = new Stack();
-    array.reverse().forEach(element => {
-        expressionStringStack.push(element)
-    });
-
-    return expressionStringStack;
-}
-
-function createNumberStack(expressionStringStack:Stack) {
-    const numberStack = new Stack();
-
-    for (let i = 0; i <= expressionStringStack.length(); i++) {
-        const element = expressionStringStack.peek();
-
-        if (element === "NEGATE") {
-            numberStack.negative();
-            expressionStringStack.pop()
-            console.log("negate")
-            continue;
-        }
-
-        const number = Number(element);
-
-        if (!isNaN(number)) {
-            numberStack.push(number)
-            expressionStringStack.pop();
-            console.log(number)
+function removeNegate(tabExpr : string[]): any {
+    let tmp = [];
+    for (let i = 0; i < tabExpr.length; i++) {
+        if (tabExpr[i] !== "NEGATE") {
+            tmp.push(tabExpr[i]);
         } else {
-            break;
+            tmp[i - 1] = "-" + tmp[i - 1];
         }
     }
-    // console.log("peek " + expressionStringStack.peek())
-    return numberStack;
+    return tmp;
 }
 
-function createOperandStack(expressionStringStack:Stack) {
-    const operandStack = new Stack();
-    const arrayOperands:any[] = [];
-    while (expressionStringStack.length() > 0) {
-        console.log("peek " + expressionStringStack.peek())
-        const element = expressionStringStack.peek();
-        const number = Number(element);
-        console.log("elem " + element)
-        if (isNaN(number)) {
-            arrayOperands.push(element)
-            expressionStringStack.pop();
-            // console.log("check loop = " + i)
-        } else {
-            console.log("break")
-            break;
-        }
-        console.log("big len " + expressionStringStack.length())
-        console.log("peek out " + expressionStringStack.peek())
-    }
-    // for (let i = 0; i <= expressionStringStack.length()+2; i++) {
-
-    // }
-    console.log("check len = " + arrayOperands.length)
-    arrayOperands.reverse().forEach(element => {
-        operandStack.push(element)
-        console.log(element)
-    });
-    return operandStack;
-}
-
-function calc(x:number, y: number, operand:string) {
-    let result:number
-
-    switch (operand) {
-        case "+":
-            result = Calc.add(x,y);
+const compute = (b : number, a : number, operator : string) : number => {
+    switch (operator) {
+        case "*":
+            return b * a;
             break;
         case "-":
-            result = Calc.minus(x,y);
+            return b - a;
             break;
-        case "*":
-            result = Calc.mult(x,y);
+        case "+":
+            return b + a;
             break;
         case "/":
-            result = Calc.div(x,y);
+            return b / a;
             break;
         case "MOD":
-            result = Calc.mod(x,y);
+            return b % a;
             break;
+
         default:
-            throw `${operand} is invalid as an operand`
+            break;
     }
-    return result;
-}
+};
 
 export default rpn;
