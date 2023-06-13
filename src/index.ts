@@ -1,21 +1,23 @@
+const expressionSeparator = " ";
+
 const rpn = (expression : string) => {
-    let expr = removeNegate(splitExpresion(expression));
+    const arrayExpressions = removeNegate(expression.split(expressionSeparator));
     let stackOperations:string|number[] = [];
 
     try {
-        for (let i = 0; i < expr.length; i++) {
-            if (isNaN(expr[i])) {
-                console.log("no ", expr[i]);
+        for (let i = 0; i < arrayExpressions.length; i++) {
+            if (isNaN(arrayExpressions[i])) {
+                console.log("no ", arrayExpressions[i]);
                 let a = Number(stackOperations.pop());
                 let b = Number(stackOperations.pop());
-                let c = compute(b, a, expr[i]);
+                let c = compute(b, a, arrayExpressions[i]);
                 if (c === Infinity) {
                     return "?";
                 }
                 stackOperations.push(c);
             } else {
-                console.log("yes ", expr[i]);
-                stackOperations.push(expr[i]);
+                console.log("yes ", arrayExpressions[i]);
+                stackOperations.push(arrayExpressions[i]);
             }
         }
     } catch (error) {
@@ -32,10 +34,6 @@ const rpn = (expression : string) => {
 
 function peek(array:string|number[]):number|string {
     return array[array.length - 1]
-}
-
-function splitExpresion(expression : string): string[] {
-    return expression.split(" ");
 }
 
 function removeNegate(tabExpr : string[]): any {
