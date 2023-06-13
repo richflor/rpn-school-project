@@ -26,7 +26,7 @@ function rpn(expression:string) {
                 if(typeof x === "number" && typeof y === "number" && typeof operand === "string") {
                     result = calc(x, y, operand);
                 } else {
-                    throw "type error"
+                    throw "type error in stack"
                 }
     
                 numberStack.push(result)
@@ -94,17 +94,26 @@ function createNumberStack(expressionStringStack:Stack) {
 function createOperandStack(expressionStringStack:Stack) {
     const operandStack = new Stack();
     const arrayOperands:any[] = [];
-    for (let i = 0; i <= expressionStringStack.length(); i++) {
-        // console.log("peek " + expressionStringStack.peek())
+    while (expressionStringStack.length() > 0) {
+        console.log("peek " + expressionStringStack.peek())
         const element = expressionStringStack.peek();
         const number = Number(element);
+        console.log("elem " + element)
         if (isNaN(number)) {
             arrayOperands.push(element)
             expressionStringStack.pop();
+            // console.log("check loop = " + i)
         } else {
+            console.log("break")
             break;
         }
+        console.log("big len " + expressionStringStack.length())
+        console.log("peek out " + expressionStringStack.peek())
     }
+    // for (let i = 0; i <= expressionStringStack.length()+2; i++) {
+
+    // }
+    console.log("check len = " + arrayOperands.length)
     arrayOperands.reverse().forEach(element => {
         operandStack.push(element)
         console.log(element)
